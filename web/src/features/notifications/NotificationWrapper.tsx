@@ -121,7 +121,7 @@ const Notifications: React.FC = () => {
     data.showDuration = data.showDuration !== undefined ? data.showDuration : true;
 
     // Backwards compat with old notifications
-    let position = data.position;
+    let position = data.position || 'top-right';
     switch (position) {
       case 'top':
         position = 'top-center';
@@ -181,6 +181,7 @@ const Notifications: React.FC = () => {
                     ? exitAnimationBottom
                     : exitAnimationRight
                 } 0.4s ease-in forwards`,
+            translate: position == 'top-right' ? '0 10vh' : '',
             ...data.style,
           }}
           className={`${classes.container}`}
@@ -201,7 +202,7 @@ const Notifications: React.FC = () => {
                           animationDuration: `${duration}ms`,
                         },
                         margin: -3,
-                      }
+                      },
                     }}
                     label={
                       <Center>
@@ -211,12 +212,7 @@ const Notifications: React.FC = () => {
                           size={32}
                           variant={tinycolor(iconColor).getAlpha() === 0 ? undefined : 'light'}
                         >
-                          <LibIcon
-                            icon={data.icon}
-                            fixedWidth
-                            color={iconColor}
-                            animation={data.iconAnimation}
-                          />
+                          <LibIcon icon={data.icon} fixedWidth color={iconColor} animation={data.iconAnimation} />
                         </ThemeIcon>
                       </Center>
                     }
@@ -229,12 +225,7 @@ const Notifications: React.FC = () => {
                     variant={tinycolor(iconColor).getAlpha() === 0 ? undefined : 'light'}
                     style={{ alignSelf: !data.alignIcon || data.alignIcon === 'center' ? 'center' : 'start' }}
                   >
-                    <LibIcon
-                      icon={data.icon}
-                      fixedWidth
-                      color={iconColor}
-                      animation={data.iconAnimation}
-                    />
+                    <LibIcon icon={data.icon} fixedWidth color={iconColor} animation={data.iconAnimation} />
                   </ThemeIcon>
                 )}
               </>
