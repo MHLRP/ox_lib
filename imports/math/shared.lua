@@ -32,7 +32,7 @@ function math.toscalars(input, min, max, round)
     local i = 0
 
     for s in string.gmatch(input:gsub('[%w]+%w?%(', ''), '(-?[%w.%w]+)') do
-        local n = parseNumber(s, min, max, round)
+        local n = parseNumber(s, min, max, round and (round == true or i < round))
 
         i += 1
         arr[i] = n
@@ -45,7 +45,7 @@ end
 ---@param input string | table
 ---@param min? number
 ---@param max? number
----@param round? boolean
+---@param round? boolean | number If round is a number, only round n values.
 ---@return number | vector2 | vector3 | vector4
 function math.tovector(input, min, max, round)
     local inputType = type(input)
@@ -89,11 +89,14 @@ function math.normaltorotation(input)
     error(('cannot convert type %s to a rotation vector'):format(inputType), 2)
 end
 
----Tries to convert its argument to a vector.
+---Tries to convert its argument to a vector4.
 ---@param input string | table
----@return number | vector2 | vector3 | vector4
+---@return vector4
 function math.torgba(input)
-    return math.tovector(input, 0, 255, true)
+    local res = math.tovector(input, 0, 255, 3)
+    assert(type(res) == 'vector4', 'cannot convert input to rgba')
+    parseNumber(res.a, 0, 1)
+    return res
 end
 
 ---Takes a hexidecimal string and returns three integers.
@@ -129,20 +132,27 @@ end
 ---@param lower number
 ---@param upper number
 ---@return number
-function math.clamp(val, lower, upper) -- credit https://love2d.org/forums/viewtopic.php?t=1856
+function math.clamp(val, lower, upper)                    -- credit https://love2d.org/forums/viewtopic.php?t=1856
     if lower > upper then lower, upper = upper, lower end -- swap if boundaries supplied the wrong way
     return math.max(lower, math.min(upper, val))
 end
 
-local function interpolate(s, f, t)
-    return s + (f - s) * t
+---Calculates an intermediate value between `start` and `finish` based on the interpolation `factor`.
+---@generic T : number | vector2 | vector3 | vector4
+---@param start T
+---@param finish T
+---@param factor integer The interpolation factor between 0 and 1.
+---@return T
+function math.interp(start, finish, factor)
+    return start + (finish - start) * factor
 end
 
-local function interpolateTable(s, f, t)
+local function interpolateTable(start, finish, factor)
+    local interp = math.interp
     local result = {}
 
-    for k, v in pairs(s) do
-        result[k] = v + (f[k] - v) * t
+    for k, v in pairs(start) do
+        result[k] = interp(v, finish[k], factor)
     end
 
     return result
@@ -165,7 +175,7 @@ function math.lerp(start, finish, duration)
 
     assert(typeFinish == typeStart, ("expected argument 2 to have type '%s' (received %s)"):format(typeStart, typeFinish))
 
-    local interpFn = typeStart == 'table' and interpolateTable or interpolate
+    local interpFn = typeStart == 'table' and interpolateTable or math.interp
     local step
 
     return function()
