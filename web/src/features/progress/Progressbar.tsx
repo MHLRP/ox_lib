@@ -10,7 +10,8 @@ const useStyles = createStyles((theme) => ({
     position: 'relative',
     width: 'max-content',
     height: 40,
-    // border: '1px solid whitesmoke',
+    background: 'linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(65,17,142,0.75) 50%, rgba(0,0,0,0) 100%)',
+    border: '0.1vh solid #41118E',
     display: 'flex',
     alignItems: 'center',
     padding: '10px',
@@ -25,12 +26,25 @@ const useStyles = createStyles((theme) => ({
     bottom: 0,
     position: 'absolute',
   },
-  tick: {
-    flexShrink: 0,
+  tickOuter: {
+    border: 0,
     height: 20,
     width: 20,
-    background: 'black',
-    clipPath: 'polygon(100% 0, 100% 63%, 69% 100%, 0% 100%, 0 51%, 0% 0%)',
+    outline: 'none',
+    backgroundColor: '#41118E',
+    cursor: 'pointer',
+    position: 'relative',
+    clipPath: 'polygon(0 0, 100% 0, 100% 75%, 75% 100%, 0 100%, 0% 50%)',
+  },
+  tickInner: {
+    position: 'absolute',
+    top: '0.2vh',
+    left: '0.2vh',
+    right: '0.2vh',
+    bottom: '0.2vh',
+    backgroundColor: '#0C0A19',
+    clipPath: 'inherit',
+    color: 'inherit',
   },
   bar: {
     height: '100%',
@@ -38,7 +52,7 @@ const useStyles = createStyles((theme) => ({
   },
   label: {
     position: 'absolute',
-    top: '-70%',
+    top: '-92%',
     maxWidth: 350,
     padding: 1,
     textOverflow: 'ellipsis',
@@ -50,7 +64,7 @@ const useStyles = createStyles((theme) => ({
   },
   percent: {
     position: 'absolute',
-    top: '-70%',
+    top: '-92%',
     right: 0,
     maxWidth: 350,
     padding: 1,
@@ -89,7 +103,6 @@ const Progressbar: React.FC = () => {
     interval.current = setInterval(() => {
       const currentTime = Date.now();
       const percent = (currentTime - startTime) / duration;
-      console.log(percent);
       setProgress(percent);
 
       if (percent >= 1) {
@@ -121,11 +134,12 @@ const Progressbar: React.FC = () => {
             <Text className={classes.percent}>{clamp(Math.floor(((20 * progress) / 20) * 100), 0, 100)}%</Text>
             {Array.from({ length: 20 }).map((_, index) => {
               return (
-                <Box
-                  key={'cyberProg:' + index}
-                  className={classes.tick}
-                  style={index + 1 <= Math.floor(20 * progress) ? { background: '#41118E' } : {}}
-                ></Box>
+                <Box key={'cyberProg:' + index} className={classes.tickOuter}>
+                  <Box
+                    className={classes.tickInner}
+                    style={index + 1 <= Math.floor(20 * progress) ? { background: '#41118E' } : {}}
+                  ></Box>
+                </Box>
               );
             })}
           </Box>
