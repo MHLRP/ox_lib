@@ -23,6 +23,8 @@ const Indicator: React.FC<Props> = ({ angle, offset, multiplier, handleComplete,
   );
   const keyHandler = useCallback(
     (e: KeyboardEvent) => {
+      if(e.key === "Alt" || e.key === "AltLeft") return;
+
       const capitalHetaCode = 880;
       const isNonLatin = e.key.charCodeAt(0) >= capitalHetaCode;
       var convKey = e.key.toLowerCase()
