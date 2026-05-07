@@ -13,7 +13,6 @@ local openMenu
 
 ---@alias MenuPosition 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 ---@alias MenuChangeFunction fun(selected: number, scrollIndex?: number, args?: any, checked?: boolean)
----@alias MenuScrollSelectChangeFunction fun(selected: number, scrollIndex?: number, args?: any)
 
 ---@class MenuOptions
 ---@field label string
@@ -36,9 +35,9 @@ local openMenu
 ---@field disableInput? boolean
 ---@field canClose? boolean
 ---@field onClose? fun(keyPressed?: 'Escape' | 'Backspace')
----@field onSelected? MenuScrollSelectChangeFunction
----@field onSideScroll? MenuScrollSelectChangeFunction
----@field onCheck? fun(selected: number, checked: boolean, args?: any)
+---@field onSelected? MenuChangeFunction
+---@field onSideScroll? MenuChangeFunction
+---@field onCheck? MenuChangeFunction
 ---@field cb? MenuChangeFunction
 
 ---@param data MenuProps

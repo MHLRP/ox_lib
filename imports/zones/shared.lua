@@ -122,15 +122,8 @@ local function removeZone(zone)
 
     insideZones[zone.id] = nil
 
-    local exitingIndex = exitingZones:indexOf(zone)
-    if exitingIndex then
-        table.remove(exitingZones, exitingIndex)
-    end
-
-    local enteringIndex = enteringZones:indexOf(zone)
-    if enteringIndex then
-        table.remove(enteringZones, enteringIndex)
-    end
+    table.remove(exitingZones, exitingZones:indexOf(zone))
+    table.remove(enteringZones, enteringZones:indexOf(zone))
 end
 
 CreateThread(function()
@@ -345,8 +338,6 @@ local function setZone(data)
     data.contains = data.contains or contains
 
     if lib.context == 'client' then
-        local coords = cache.coords or GetEntityCoords(cache.ped)
-        data.distance = #(data.coords - coords)
         data.setDebug = setDebug
 
         if data.debug then
