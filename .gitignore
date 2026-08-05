@@ -1,4 +1,5 @@
 .idea
+.luarc.jsonc
 created_zones.lua
 
 node_modules
@@ -10,4 +11,8 @@ pnpm-debug.log*
 
 /web/node_modules
 /web/build
+<<<<<<< HEAD
 web/package-lock.json
+=======
+/package/dist
+>>>>>>> upstream/main
