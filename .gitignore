@@ -8,11 +8,8 @@ pnpm-debug.log*
 /package/**/*.js
 /package/**/*.js.map
 /package/**/*.d.ts
+/package/dist
 
 /web/node_modules
 /web/build
-<<<<<<< HEAD
 web/package-lock.json
-=======
-/package/dist
->>>>>>> upstream/main
